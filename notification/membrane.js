@@ -25,7 +25,7 @@
  * @author tvcutsem
  */
 
-// requires Notification Proxies
+// requires Notification Proxies 
 // load('notify-reflect.js') before using
  
 (function(exports){
