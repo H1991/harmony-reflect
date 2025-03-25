@@ -1,0 +1,30 @@
+name: Checkmarx SCA Scan
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  checkmarx_sca_scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download Checkmarx SCA Resolver
+        run: wget -O ScaResolver-linux64.tar.gz https://sca-downloads.s3.amazonaws.com/cli/latest/ScaResolver-linux64.tar.gz
+
+      - name: Extract SCA Resolver
+        run: tar -xzf ScaResolver-linux64.tar.gz
+
+      - name: Run Checkmarx SCA Scan
+        run: |
+          chmod +x ScaResolver
+          ./ScaResolver -s ${{ github.workspace }} \
+            -n "TestHarmony-reflect" \
+            -a ${{ secrets.SCA_ACCOUNT }} \
+            -u ${{ secrets.CHECKMARX_SCA_USERNAME }} \
+            -p '${{ secrets.CHECKMARX_SCA_PASSWORD }}'
